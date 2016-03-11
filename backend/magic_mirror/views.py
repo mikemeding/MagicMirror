@@ -1,5 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework import viewsets
+from .models import Setting
+from .serializers import SettingSerializer
 
-def index(request):
-    return HttpResponse("<h1>some stuff here</h1>")
+
+class SettingsViewSet(viewsets.ModelViewSet):
+    '''
+    API endpoint for accessing settings for magic_mirror
+    '''
+    queryset = Setting.objects.all()
+    serializer_class = SettingSerializer
