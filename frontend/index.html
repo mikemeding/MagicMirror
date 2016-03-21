@@ -1,8 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="app.js"></script>
 </head>
+<body ng-app="myApp" ng-controller="Main">
 
-<body>
-<h1> it works</h1>
+<h2>{{test}}</h2>
+
+<ul>
+    <li ng-repeat="item in settings">key:{{item.key}} , value:{{item.value}}</li>
+</ul>
 </body>
 </html>
