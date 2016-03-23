@@ -4,18 +4,30 @@
 
 var app = angular.module('myApp', []);
 
-app.controller("Main", function ($scope, $http) {
-    $scope.test = "Magic Mirror";
+app.controller("Main", function ($scope, $http, $timeout) {
 
     $scope.baseUrl = "http://localhost:8000/magic_mirror/settings/";
 
-    // Get all settings from database
+    // CLOCK
+    $scope.clock = "loading..."; // initialise the time variable
+    var tickInterval = 1000; //ms
+
+    var tick = function () {
+        $scope.clock = Date.now(); // get the current time
+        $timeout(tick, tickInterval); // reset the timer
+    };
+
+    // Start the timer
+    $timeout(tick, tickInterval);
+
+
+    // SETTINGS
     $http(
         {
             method: 'GET',
             url: $scope.baseUrl,
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type": "application/json"
             }
         }
     ).then(function successCallback(resp) {

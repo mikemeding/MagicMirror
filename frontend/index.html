@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
     <script src="app.js"></script>
 </head>
 <body ng-app="myApp" ng-controller="Main">
 
-<h2>{{test}}</h2>
-
+<h1>{{ clock | date:'yyyy-MM-dd'}}</h1>
+<h1>{{ clock | date:'HH:mm:ss'}}</h1>
 <ul>
     <li ng-repeat="item in settings">key:{{item.key}} , value:{{item.value}}</li>
 </ul>
