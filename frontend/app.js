@@ -33,6 +33,17 @@ app.controller("Main", function ($scope, $http, $timeout) {
     ).then(function successCallback(resp) {
         console.log(resp.data);
         $scope.settings = resp.data;
+
+        // for all settings
+        for (var index in $scope.settings) {
+            var item = $scope.settings[index];
+
+            // find welcomeText
+            if (item.key === "welcomeText") {
+                $scope.welcomeText = item.value; // bind it
+            }
+        }
+
     }, function errorCallback(resp) {
         console.error(resp);
     })
