@@ -1,4 +1,4 @@
-#!/home/pi/MagicMirror/venv/bin/python2
+#!/home/mike/Documents/MagicMirror/venv/bin/python3.5
 
 # -*- coding: utf-8 -*-
 import re
