@@ -1,0 +1,17 @@
+body {
+    background-color: black;
+}
+
+h1, h2, h3 {
+    color: white;
+    font-family: 'Poiret One', cursive;
+    font-size: 500%;
+}
+
+h2 {
+    font-size: 300%;
+}
+
+h3 {
+    font-size: 200%;
+}

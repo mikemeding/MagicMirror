@@ -32,20 +32,45 @@ app.controller("Main", function ($scope, $http, $timeout) {
         }
     ).then(function successCallback(resp) {
         console.log(resp.data);
-        $scope.settings = resp.data;
+        $scope.rawSettings = resp.data;
+        $scope.settings = {}; // reset settings
 
         // for all settings
-        for (var index in $scope.settings) {
-            var item = $scope.settings[index];
+        for (var index in resp.data) {
+            var item = resp.data[index];
 
-            // find welcomeText
-            if (item.key === "welcomeText") {
-                $scope.welcomeText = item.value; // bind it
-            }
+            // make giant object out of settings
+            $scope.settings[item.key] = item.value;
         }
 
     }, function errorCallback(resp) {
         console.error(resp);
-    })
+    });
+
+    // WEATHER
+    // request token id
+    // APPID=a0ae0f837a6983d091ff11e189824f6a
+    // example
+    //http://api.openweathermap.org/data/2.5/weather?id=5599665&APPID=a0ae0f837a6983d091ff11e189824f6a
+
+    var weatherUrl = "http://api.openweathermap.org/data/2.5/";
+    var appId = "&APPID=a0ae0f837a6983d091ff11e189824f6a";
+    var locationId = "5599665";
+
+    $http(
+        {
+            method: 'GET',
+            url: weatherUrl + "weather" + "?id=" + locationId + appId,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    ).then(function successCallback(resp) {
+        console.log(resp.data);
+        $scope.weather = resp.data;
+    }, function errorCallback(resp) {
+        console.error(resp);
+    });
+
 
 });

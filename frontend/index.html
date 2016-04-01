@@ -5,19 +5,41 @@
     <title>Title</title>
     <!--LIBRARIES-->
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="app.js"></script>
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="custom.css">
+    <link href='https://fonts.googleapis.com/css?family=Poiret+One' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/custom.css">
 </head>
-<body ng-app="myApp" ng-controller="Main" class="container">
+<body ng-app="myApp" ng-controller="Main" class="container-fluid">
+<div class="row">
+    <!--left side top-->
+    <div class="col-lg-6" ng-show="weather">
+        <h2 class="text-left">Current Weather: {{weather.weather[0].main}}</h2>
+        <h3 class="text-left">Temp {{weather.main.temp - 273.15|number:2}}&deg;C</h3>
+        <h3 class="text-left">Humidity {{weather.main.humidity|number:0}}%</h3>
+        <h3 class="text-left">Pressure {{weather.main.pressure|number:1}} mb</h3>
+        <h3 class="text-left">Wind {{weather.wind.speed}} mph</h3>
+        <!--<h3 class="text-left">{{weather.weather[0].description}}</h3>-->
+        <!--<h3 class="text-left">Sunrise {{weather.sys.sunrise | date:'HH:mm'}}</h3>-->
+        <h3 class="text-left">Sunset {{weather.sys.sunset | date:'HH:mm'}}</h3>
 
-<h1 class="text-center clock">{{ clock | date:'yyyy-MM-dd'}}</h1>
-<h1 class="text-center clock">{{ clock | date:'HH:mm:ss'}}</h1>
-<h1 class="text-left">{{welcomeText}}</h1>
-<ul class="list-group">
-    <li class="list-group-item" ng-repeat="item in settings">key:{{item.key}} , value:{{item.value}}</li>
-</ul>
+    </div>
+    <!--right side top-->
+    <div class="col-lg-6">
+        <h1 class="text-right clock">{{ clock | date:'yyyy-MM-dd'}}</h1>
+        <h1 class="text-right clock">{{ clock | date:'HH:mm'}}</h1>
+    </div>
+</div>
+<div class="row">
+    <h1 class="text-center">{{settings.welcomeText}}</h1>
+</div>
+<!--DEBUG-->
+<!--<ul class="list-group">-->
+<!--<li class="list-group-item" ng-repeat="item in rawSettings">key:{{item.key}} , value:{{item.value}}</li>-->
+<!--</ul>-->
+
 </body>
 </html>
