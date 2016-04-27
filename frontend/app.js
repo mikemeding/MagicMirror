@@ -57,20 +57,30 @@ app.controller("Main", function ($scope, $http, $timeout) {
     var appId = "&APPID=a0ae0f837a6983d091ff11e189824f6a";
     var locationId = "5599665";
 
-    $http(
-        {
-            method: 'GET',
-            url: weatherUrl + "weather" + "?id=" + locationId + appId,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }
-    ).then(function successCallback(resp) {
-        console.log(resp.data);
-        $scope.weather = resp.data;
-    }, function errorCallback(resp) {
-        console.error(resp);
-    });
+    var weatherUpdateInterval = 1800000; //30 minutes
 
+    var updateWeather = function () {
+
+        $http(
+            {
+                method: 'GET',
+                url: weatherUrl + "weather" + "?id=" + locationId + appId,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        ).then(function successCallback(resp) {
+            console.log(resp.data);
+            $scope.weather = resp.data;
+        }, function errorCallback(resp) {
+            console.error(resp);
+        });
+
+        $timeout(updateWeather, tickInterval); // reset the timer
+    };
+    updateWeather(); // on first run
+
+    // Start the timer
+    $timeout(updateWeather, weatherUpdateInterval);
 
 });
