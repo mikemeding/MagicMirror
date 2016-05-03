@@ -34,7 +34,7 @@ Email: mike@mikemeding.com}
 \IEEEauthorblockN{Peter Welby}
 \IEEEauthorblockA{University of Massachusetts Lowell\\Computer Science\\
 Lowell, Massachusetts 01852\\
-Email: pwelby.mauz@gmail.com}
+Email: pwelby@cs.uml.edu}
 \and
 \IEEEauthorblockN{Harun Guna}
 \IEEEauthorblockA{University of Massachusetts Lowell\\Computer Science\\
@@ -137,7 +137,50 @@ Misc. Fasteners & \$10\\
 %%% examples of how to do this are shown below
 %%% also talk about your results and what they mean
 
+\subsection{Motion Detection}
+In keeping with the Security and Privacy aspects of this course, a portion of our testing was dedicated to exploring exactly what kind of information a device such as the Magic Mirror could collect if it were deployed in, for example, a user's home.
+To that end, we collected motion detection data from the device's PIR sensor over the course of one week in the workspace of one of our group members.
+Figures \ref{fig:chart26} and \ref{fig:chart29} show, by way of example, the data collected on April 26 and April 29, 2016, respectively.
+The vertical axis shows the number of positive detections reported by the PIR sensor, and these are bucketed into twelve two-hour periods for each day's histogram.
+Even these examples yield information as to when this individual spent the most time at his desk, at which the motion sensor was pointed.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=2.75in]{images/Chart-April26.jpg}
+  \caption{Histogram showing motion activity on April 26}
+  \label{fig:chart26}
+\end{figure}
 
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=2.75in]{images/Chart-April29.jpg}
+  \caption{Histogram showing motion activity on April 29}
+  \label{fig:chart29}
+\end{figure}
+
+By collecting this type of data over multiple days, we can begin to model the user's habits by calculating the average number of motion detections within a particular time interval over the course of the data collection period.
+During our study spanning from April 24 to May 1 2016, we compiled a set of averages for each two-hour in the day. Figure \ref{fig:chartavg} plots these averages against their corresponding time intervals.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=2.75in]{images/Chart-averages.jpg}
+  \caption{Average number of motion detections during each of 12 two-hour periods, from April 24 to May 1}
+  \label{fig:chartavg}
+\end{figure}
+
+We can see in Figure \ref{fig:chartavg} that there are certain times when the user is relatively more likely to be moving within the field of view of the motion sensor.
+In this case, 06 to 10 hours (6:00 AM to 10:00 AM) and 20 hours (8:00 PM) onward appear, on average, to be the times of greatest activity in this workspace.
+Because the sensor senses at very short range, this places the individual within close proximity of the device itself.
+As such, logging this data insecurely could compromise the privacy of the user by disclosing those times when the user is near the device, which could be used in conjunction with knowledge about the device's location to arrive at additional conclusions about that individual's daily routine.
+
+\subsection{Mirror UI}
+As the Magic Mirror's function is based largely on bringing aesthetically pleasing utility to a common wall fixture, our evaluation of the UI's success relies heavily upon the comments we received from those who observed the demonstration of the Magic Mirror during the final presentation session.
+Those in attendance spoke favorably about the look and feel of the UI and the information it provides, with a few people noting that they would have use for a Magic Mirror of their own.
+Figure \ref{fig:mirrorui} shows the Magic Mirror's informational UI for reference.
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=2.75in]{images/mirror-ss.png}
+  \caption{Screen capture of the Magic Mirror's information display UI}
+  \label{fig:mirrorui}
+\end{figure}
 
 
 % An example of a floating figure using the graphicx package.
