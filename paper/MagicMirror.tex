@@ -11,6 +11,11 @@
 
 % for figures
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
 
 \begin{document}
@@ -41,8 +46,6 @@ Email: pwelby@cs.uml.edu}
 Lowell, Massachusetts 01852\\
 Email: harung1993@gmail.com}
 }
-
-
 
 % make the title area
 \maketitle
@@ -75,28 +78,29 @@ Displayed on the screen are various dynamic items which the user may find helpfu
 
 %%% Harun, you need to find the original project that this is based on and cite it.
 %%% also talk about how our project differs from that original project.
-This project was inspired by an already existing work of \href{http://michaelteeuw.nl/}{Michael Teeuw}. The hardware implementation we followed can be seen using this link \href{http://michaelteeuw.nl/post/80391333672/magic-mirror-part-i-the-idea-the-mirror}{Mr.Teeuw}. As we went along with the implementation we came across an idea of including a PIR sensor. By employing PIR we can detect the human presence , thereby automating the screen to turn on and off when someone stands infront of it. This not only provides a futuristic feature but also conserves energy . 
-
+This project was inspired by the already existing work of \href{http://michaelteeuw.nl/}{Michael Teeuw}. The hardware implementation we followed can be seen using this link \href{http://michaelteeuw.nl/post/80391333672/magic-mirror-part-i-the-idea-the-mirror}{Mr.Teeuw}. As we went along with the implementation we came across an idea of including a PIR sensor. By employing PIR we can detect the human presence , thereby automating the screen to turn on and off when someone stands infront of it. This not only provides a futuristic feature but also conserves energy . 
 
 
 \section{System} 
 %The name of this section can be the name of the actual system students are developing or other meaningful names. A detailed description of the system. The overall design of the system should be presented first, followed by detailed introduction to complicated components. Subsections should be used whenever necessary, for example, when the content is too long as one section/subsection.
-Building the Magic Mirror consisted of two parts, building the device, and writing an inituitve web interface.
+Building the Magic Mirror consisted of two parts, building the device, and writing an intuitive web interface.
 \subsection{Building the Magic Mirror}
-The mirror that was constructed for this project was assembled using a variety of used electronics as shown in Table \ref{tab:cost}.
-
+The mirror that was constructed for this project was assembled using a variety of used electronics as shown by the cost breakdown in Table \ref{tab:cost}.
+Dimensions of the mirror when finished were 11x17 for the mirror size and then slightly larger than that including the width of the frame.
+The build process took about 3 weeks from start to finish and the most difficult portion of the build was getting all the electronics to work together.
+An LCD television was the base platform which drove all the other design choices such as how large to cut the frame how to power the Raspberry PI.
+The glass of mirror consisted of a sheet of 1/8 inch Plexiglas covered in automotive 1 way window tint.
+This window tint is what gives the mirror the holographic effect when high contrast text is shown on the display.
 
 \begin{table}[!t]
 % increase table row spacing, adjust to taste
 \renewcommand{\arraystretch}{1.3}
-%if using array.sty, it might be a good idea to tweak the value of
-%\extrarowheight as needed to properly center the text within the cells
 \caption{Parts List and Cost}
 \label{tab:cost}
 \centering
 % Some packages, such as MDW tools, offer better commands for making tables
 % than the plain LaTeX2e tabular which is used here.
-\begin{tabular}{|l||c|}
+\begin{tabular}{|l|c|}
 \hline
 Part Description & Cost\\
 \hline
@@ -117,26 +121,107 @@ Used Picture Frame & \$5\\
 \hline
 Misc. Fasteners & \$10\\
 \hline
+\hline
+Total & \$87\\
+\hline
 \end{tabular}
 \end{table}
 
-
-
-
 \subsection{Programming the Magic Mirror}
+Programming the Magic Mirror required setting up a web-based Python environment.
+For this Django was chosen as it is one of the best supported environments for server side python.
+This made the integration with AWS IoT simple as many of the examples online are shown in python.
+In addition to sending status messages to AWS IoT the Magic Mirror also has its own local database where it stores its settings.
+These settings are unique to the device and consist of custom messages that the user has made and the current location settings of the device.
+A breakdown of the structure of the Magic Mirror software is shown in Figure \ref{fig:design}.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=2.5in]{images/DesignFlow.png}
+  \caption{The design flow of the Magic Mirror software platform.}
+  \label{fig:design}
+\end{figure}
+
+%angular and bootstrap frontend
+%djago backend
+
 
 \section{Analysis} 
 %In the section of System, we focus on the big picture of the system and cover most issues that can be explained clearly. We often move heavy mathematical analysis of components and performance of the system into another section called Analysis or other appropriate names. 
+The analysis section of this paper will involve 3 sections, Backend Code Review, Frontend Code Review, and Electronics.
+Each section will talk about the methods used and all relevant details as to how the code was written or how the task was accomplished.
+
+\subsection{Backend Code Review}
+% talk about programming api here
+The programming API of Magic Mirror is shown in Table \ref{tab:API}.
+This API is leveraged by the client side of Magic Mirror for all of its settings and custom options.
+The database for these settings is SQLite3 with a single table for all settings in the form of a hash map.
+Each setting is simply a key value pair with no duplicates.
+This pattern was used to create an easy integration between server and client side of Magic Mirror.
+
+% API TABLE
+\begin{table}[!ht]
+\renewcommand{\arraystretch}{1.3}
+\caption{Magic Mirror Backend API}
+\label{tab:API}
+\centering
+\begin{tabular}{|c|c|L{4cm}|}
+\hline
+Type & Url & Description\\
+\hline
+\hline
+GET & /magic\_mirror/settings/ & Returns all items contained in the database\\
+\hline
+POST & /magic\_mirror/settings/ & Adds a new item to the database as described by the payload\\
+\hline
+GET & /magic\_mirror/settings/\# & Returns a specific setting given by the ID \# in the url\\
+\hline
+PUT & /magic\_mirror/settings/\# & Updates a specific setting given by the ID \# in the url\\
+\hline
+DELETE & /magic\_mirror/settings/\# & Removes a specific setting given by the ID \# in the url\\
+\hline
+\end{tabular}
+\end{table}
+
+Additionally, The backend of Magic Mirror integrates with AWS IoT.
+The PIR sensor status is communicated to AWS for statistical monitoring and security.
+The Magic Mirror may also act as an intrusion detection system as the status of the mirror can be seen online through the dashboard.
+This means that if a user wished to see if the Mirror was in use they need only check online.
+More detail of this integration is shown in the Evaluation section of this paper.
+
+\subsection{Frontend Code Review}
+% talk about issues with getting bootstrap to play along with angular
+% talk about having to write custom CSS
+The frontend code of Magic Mirror was challenging due to its integration with both AngularJS and the Django backend framework.
+By creating a wrapper for the API in AngularJS it was possible to bring all the needed functionality to the frontend.
+The most important part was retrieving and organizing the settings so that the client could send requests to its other services such as weather.
+Another challenge encountered while writing the frontend of Magic Mirror was making a UI which was both passive and useful.
+The interface for the client must be passive as the only interaction that the user has with the device is the detection of the user.
+Therefore, the interface must be useful but only at a glance.
+This was challenging as it is simple to overload the user with textual information when so much is present.
+As a design choice Magic Mirror has the room to add and remove options but by default only comes with the current weather and the current time as those two options are the most prevalent.
+
+\subsection{Electronics}
+% talk about issues with wiring the electronics here
+As shown in Figure \ref{fig:elec}, the electronics for Magic Mirror are somewhat complex.
+The bulk of the electronics were taken from a used LCD television which contained a logic board, power supply, and LCD panel.
+Magic Mirror required the use of a Raspberry PI which is powered via a USB port at 5V and an HDMI port which was supplied by the television by default.
+The 5V to power the PI was bridged off of the power supply for the television and wired to a sacrificial USB cord and an HDMI cable was run from the output of the Raspberry PI to the television.
+All of the electronics were then mounted using hot glue to a corrugated plastic backing which was affixed to the picture frame.
+
+% ELECTROINICS PICTURE
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=2.5in]{images/Electronics.png}
+  \caption{The completed electronics of the Magic Mirror}
+  \label{fig:elec}
+\end{figure}
+
 
 \section{Evaluation}
 %In this section, system performance is presented. How well does the system achieve its goal? Quantitative metrics should be used whenever necessary. Tables, figures with curves and charts are often used to show the performance such as the trend. To this end, 
   %whatever system students have developing, at least one week of data must be collected to show meaningful results. 
 %For the alternative project on Edimax plug security, students should use Raspberry Pi to control the plug for at least one week and record the activities of turning on/off the plug with Raspberry Pi and other meaningful data.
-
-
-%%% Peter, include the results of your data here with graph or table.
-%%% examples of how to do this are shown below
-%%% also talk about your results and what they mean
 
 \subsection{Motion Detection}
 In keeping with the Security and Privacy aspects of this course, a portion of our testing was dedicated to exploring exactly what kind of information a device such as the Magic Mirror could collect if it were deployed in, for example, a user's home.
@@ -184,95 +269,12 @@ Figure \ref{fig:mirrorui} shows the Magic Mirror's informational UI for referenc
 \end{figure}
 
 
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
-
-% Note that the IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
-
-
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
-
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% the IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
 \section{Conclusion}
 %In this section, the presented work is concluded. A brief introduction to the work is expected. Include the highlights of the work in conclusion. If necessary, future work can be discussed here.
 
-% use section* for acknowledgment
-%\section*{Acknowledgment}
+% HARUN,
+% talk about how using the PIR sensor as an intrusion detection method could be an extension of this application.
+% conclude all thoughts contained above.
 
 
 % =====================================================  references section =======================================================

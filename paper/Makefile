@@ -11,5 +11,6 @@ clean:
 	rm *.blg
 	rm *.pdf
 	rm *.aux
+	rm *.out
 	
 
