@@ -64,22 +64,19 @@ A Magic Mirror is a Raspberry Pi powered computer display that sits behind a she
 The Mirror is designed to detect the presence of person and activate the display when a person is detected.
 Displayed on the screen are various dynamic items which the user may find helpful when looking in the mirror such as the current weather and time.
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.5in, angle=-90]{images/Mirror.jpg}
-  \caption{The finished Magic Mirror in action. Note the displayed text which appears near the dark regions of the photo.}
-  \label{fig:mirror}
+\centering
+\includegraphics[width=2.5in, angle=-90]{images/Mirror.jpg}
+\caption{The finished Magic Mirror in action. Note the displayed text which appears near the dark regions of the photo.}
+\label{fig:mirror}
 \end{figure}
 
 
 \section{Related Work}  
 %An academic paper should demonstrate novelties, i.e., things and/or theories that have not been done in the whole world. This requires the authors to be familiar with the complete bibliography. The most related work to this paper should be presented in this section. Comparison should be made whenever necessary to demonstrate the difference between this work and related work.
-%REMEMBER TO CITE!!!!
-
 
 %%% Harun, you need to find the original project that this is based on and cite it.
 %%% also talk about how our project differs from that original project.
-This project was inspired by the already existing work of \href{michaelteeuw.nl}{ Michael Teeuw } . The hardware implementation we followed is straighforward follows the work of  \href{http://michaelteeuw.nl/post/80391333672/magic-mirror-part-i-the-idea-the-mirror}{Michael Teeuw's Step by Step guide}. As we went along with the implementation we came across an idea of including a PIR sensor. By employing PIR we can detect the human presence , thereby automating the screen to turn on and off when someone stands infront of it. This not only provides a futuristic feature but also conserves energy . 
-
+This project was inspired by the already existing work of Michael Teeuw \cite{teeuw}. The hardware implementation followed for this project follows the work of Michael Teeuw's Step by Step guide \cite{mteeuw}. One major differance between Michael Teeuw's project and Magic Mirror is that Magic Mirror included a PIR sensor for detecting human presence. By detecting human presence Magic Mirror can automate the screen to turn on and off when relevant information is needed. This not only provides a clean interface but also conserves energy when the mirror is not being used.
 
 \section{System} 
 %The name of this section can be the name of the actual system students are developing or other meaningful names. A detailed description of the system. The overall design of the system should be presented first, followed by detailed introduction to complicated components. Subsections should be used whenever necessary, for example, when the content is too long as one section/subsection.
@@ -136,10 +133,10 @@ These settings are unique to the device and consist of custom messages that the 
 A breakdown of the structure of the Magic Mirror software is shown in Figure \ref{fig:design}.
 
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.5in]{images/DesignFlow.png}
-  \caption{The design flow of the Magic Mirror software platform.}
-  \label{fig:design}
+\centering
+\includegraphics[width=2.5in]{images/DesignFlow.png}
+\caption{The design flow of the Magic Mirror software platform.}
+\label{fig:design}
 \end{figure}
 
 %angular and bootstrap frontend
@@ -153,11 +150,12 @@ Each section will talk about the methods used and all relevant details as to how
 
 \subsection{Backend Code Review}
 % talk about programming api here
+The backend of the Magic Mirror software is written in django which is a scalable and robust python framework \cite{django}.
+Django makes it easy to create a web application by writing web based API's which then integrate into your client side framework.
 The programming API of Magic Mirror is shown in Table \ref{tab:API}.
 This API is leveraged by the client side of Magic Mirror for all of its settings and custom options.
 The database for these settings is SQLite3 with a single table for all settings in the form of a hash map.
-Each setting is simply a key value pair with no duplicates.
-This pattern was used to create an easy integration between server and client side of Magic Mirror.
+Each setting is simply a key value pair with no duplicates and this pattern was used to create an easy integration between server and client side of Magic Mirror.
 
 % API TABLE
 \begin{table}[!ht]
@@ -192,7 +190,7 @@ More detail of this integration is shown in the Evaluation section of this paper
 \subsection{Frontend Code Review}
 % talk about issues with getting bootstrap to play along with angular
 % talk about having to write custom CSS
-The frontend code of Magic Mirror was challenging due to its integration with both AngularJS and the Django backend framework.
+The frontend code of Magic Mirror was challenging due to its integration with both AngularJS and the Django backend framework \cite{angularjs}.
 By creating a wrapper for the API in AngularJS it was possible to bring all the needed functionality to the frontend.
 The most important part was retrieving and organizing the settings so that the client could send requests to its other services such as weather.
 Another challenge encountered while writing the frontend of Magic Mirror was making a UI which was both passive and useful.
@@ -211,10 +209,10 @@ All of the electronics were then mounted using hot glue to a corrugated plastic 
 
 % ELECTROINICS PICTURE
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.5in]{images/Electronics.png}
-  \caption{The completed electronics of the Magic Mirror}
-  \label{fig:elec}
+\centering
+\includegraphics[width=2.5in]{images/Electronics.png}
+\caption{The completed electronics of the Magic Mirror}
+\label{fig:elec}
 \end{figure}
 
 
@@ -230,26 +228,26 @@ Figures \ref{fig:chart26} and \ref{fig:chart29} show, by way of example, the dat
 The vertical axis shows the number of positive detections reported by the PIR sensor, and these are bucketed into twelve two-hour periods for each day's histogram.
 Even these examples yield information as to when this individual spent the most time at his desk, at which the motion sensor was pointed.
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.75in]{images/Chart-April26.jpg}
-  \caption{Histogram showing motion activity on April 26}
-  \label{fig:chart26}
+\centering
+\includegraphics[width=2.75in]{images/Chart-April26.jpg}
+\caption{Histogram showing motion activity on April 26}
+\label{fig:chart26}
 \end{figure}
 
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.75in]{images/Chart-April29.jpg}
-  \caption{Histogram showing motion activity on April 29}
-  \label{fig:chart29}
+\centering
+\includegraphics[width=2.75in]{images/Chart-April29.jpg}
+\caption{Histogram showing motion activity on April 29}
+\label{fig:chart29}
 \end{figure}
 
 By collecting this type of data over multiple days, we can begin to model the user's habits by calculating the average number of motion detections within a particular time interval over the course of the data collection period.
 During our study spanning from April 24 to May 1 2016, we compiled a set of averages for each two-hour in the day. Figure \ref{fig:chartavg} plots these averages against their corresponding time intervals.
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.75in]{images/Chart-averages.jpg}
-  \caption{Average number of motion detections during each of 12 two-hour periods, from April 24 to May 1}
-  \label{fig:chartavg}
+\centering
+\includegraphics[width=2.75in]{images/Chart-averages.jpg}
+\caption{Average number of motion detections during each of 12 two-hour periods, from April 24 to May 1}
+\label{fig:chartavg}
 \end{figure}
 
 We can see in Figure \ref{fig:chartavg} that there are certain times when the user is relatively more likely to be moving within the field of view of the motion sensor.
@@ -262,10 +260,10 @@ As the Magic Mirror's function is based largely on bringing aesthetically pleasi
 Those in attendance spoke favorably about the look and feel of the UI and the information it provides, with a few people noting that they would have use for a Magic Mirror of their own.
 Figure \ref{fig:mirrorui} shows the Magic Mirror's informational UI for reference.
 \begin{figure}[!ht]
-  \centering
-  \includegraphics[width=2.75in]{images/mirror-ss.png}
-  \caption{Screen capture of the Magic Mirror's information display UI}
-  \label{fig:mirrorui}
+\centering
+\includegraphics[width=2.75in]{images/mirror-ss.png}
+\caption{Screen capture of the Magic Mirror's information display UI}
+\label{fig:mirrorui}
 \end{figure}
 
 
@@ -275,7 +273,7 @@ Figure \ref{fig:mirrorui} shows the Magic Mirror's informational UI for referenc
 % HARUN,
 % talk about how using the PIR sensor as an intrusion detection method could be an extension of this application.
 % conclude all thoughts contained above.
-As stated, the main objective of the course was to implement an IOT device and connect it to the Amazon AWS, thereby understanding and analysing the security threats. And we implemented a Raspberry pie based smart mirror which displays the necessary informations to user when they stand infront of it. The PIR sensor attached along with the mirror detects the human presence thereby logging it into the Amazong Dynamo DB. By collecting the data over a period of time, in our case two weeks we can understand the behavioral pattern of the user. Some of the vital informations we analysed are the users daily routine for example the morning wake up time and thus future customisation for particular users is possible. By implementing the Smart mirror we analysed and understood the constraints one would face during the Iot development and various factors to be cared in respect to security.
+As stated, the main objective of the course was to implement an IOT device and connect it to the Amazon AWS, thereby understanding and analyzing the security threats. This was accomplished by implementing a Raspberry PI based intelligent mirror which displays useful static information to user when in the vicinity of the device. The PIR sensor attached behind the mirror detects human presence and logs this information to Amazon Dynamo DB. By collecting the data over a period of time, we can understand the behavioral pattern of the user. Some of the vital information analyzed was the users daily routine. For example, the morning wake up time for which the mirror can then plan to show relevant items at that time. By implementing the Magic Mirror we analyzed and understood the constraints one would face during IoT development and various other factors as they relate to IoT based security.
 
 % =====================================================  references section =======================================================
 %References. At the end of the paper, there is always References. In the body of the paper, appropriate citations of references should be inserted into the right position, identifying related work. The list of references must not include references not cited in the paper. That is, references cannot be just listed without citations in the paper. Please use the reference and citation formatting in IEEE formatting template in this paper. 
@@ -297,15 +295,22 @@ As stated, the main objective of the course was to implement an IOT device and c
 %\bibitem{IEEEhowto:kopka}
 %H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
  % 0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-  "Xonay Labs | Michael Teeuw." Xonay Labs | Michael Teeuw. N.p., n.d. Web. 05 May 2016.
-  
-  Michaelteeuw. "Magic Mirror: Part I - The Idea & The Mirror." Xonay Labs. N.p., n.d. Web. 05 May 2016.
- 
-  "A Magic Mirror Powered by a Raspberry Pi. Best Christmas Present I've Ever Put Together. Detailed Tutorial in Comments." Imgur. N.p., n.d. Web. 05 May 2016.
+ \bibitem{teeuw}
+ "Xonay Labs | Michael Teeuw." Xonay Labs | Michael Teeuw. N.p., n.d. Web. 05 May 2016.
+
+ \bibitem{mteeuw}
+ Michaelteeuw. "Magic Mirror: Part I - The Idea & The Mirror." Xonay Labs. N.p., n.d. Web. 05 May 2016.
+ "A Magic Mirror Powered by a Raspberry Pi. Best Christmas Present I've Ever Put Together. Detailed Tutorial in Comments." Imgur. N.p., n.d. Web. 05 May 2016.
+
+ \bibitem{django}
+ Greenfeld, D., & Roy, A. (n.d.). Two scoops of Django: Best practices for Django 1.8.
+
+ \bibitem{angularjs}
+ Freeman, A. (n.d.). Pro AngularJS.
 
 
-\end{thebibliography}
+ \end{thebibliography}
 
-\end{document}
+ \end{document}
 
 
